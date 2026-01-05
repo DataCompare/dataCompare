@@ -16,10 +16,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @Configuration
 //@MapperScan("com.crunchydata.system.mapper")
-// 临时处理，后续调整
 @MapperScan({
-        "com.crunchydata.mapper",        // 第一个 Mapper 包（DCConfigurationsMapper 所在）
-        "com.crunchydata.system.mapper"  // 第二个 Mapper 包（SysUserMapper 所在）
+        "com.crunchydata.mapper",        // 第一个 Mapper 包（对比Mapper 所在）
+        "com.crunchydata.system.mapper"  // 第二个 Mapper 包（管理Mapper 所在）
 })
 public class MybatisPlusConfig {
 
