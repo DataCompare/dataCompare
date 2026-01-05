@@ -37,11 +37,12 @@ Before initiating the build and installation process, ensure the following prere
 1. **Java** 17 or later.
 2. **Maven** 3.8 or later.
 3. **Postgres** 15 or later (for the repository).
-4. Supported JDBC drivers (DB2, Postgres, MySQL, MSSQL and Oracle currently supported).
-5. Direct Postgres connections.
-6. Vue3、pnpm、TypeScript、NaiveUI、Vite5、UnoCSS
-7. **node** 20 or later
-8. **pnpm** 9 or later
+4. **redis** 5.0 or later.
+5. Supported JDBC drivers (DB2, Postgres, MySQL, MSSQL and Oracle currently supported).
+6. Direct Postgres connections.
+7. Vue3、pnpm、TypeScript、NaiveUI、Vite5、UnoCSS
+8. **node** 20 or later
+9. **pnpm** 9 or later
 
 ## Limitations
 
