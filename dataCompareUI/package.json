@@ -1,20 +1,20 @@
 {
   "name": "soybean-admin",
   "type": "module",
-  "version": "1.3.11",
-  "description": "A fresh and elegant admin template, based on Vue3、Vite3、TypeScript、NaiveUI and UnoCSS. 一个基于Vue3、Vite3、TypeScript、NaiveUI and UnoCSS的清新优雅的中后台模版。",
+  "version": "1.0.0",
+  "description": "data Compare is a Java-based tool for validating data consistency after replication or migration between databases.",
   "author": {
-    "name": "Soybean",
+    "name": "wjx",
     "email": "soybeanjs@outlook.com",
-    "url": "https://github.com/soybeanjs"
+    "url": "https://github.com/WJX20/dataCompare"
   },
-  "license": "MIT",
-  "homepage": "https://github.com/soybeanjs/soybean-admin",
+  "license": "Apache-2.0 license",
+  "homepage": "https://github.com/WJX20/dataCompare",
   "repository": {
-    "url": "https://github.com/soybeanjs/soybean-admin.git"
+    "url": "https://github.com/WJX20/dataCompare.git"
   },
   "bugs": {
-    "url": "https://github.com/soybeanjs/soybean-admin/issues"
+    "url": "https://github.com/WJX20/dataCompare/issues"
   },
   "keywords": [
     "Vue3 admin ",
@@ -113,11 +113,11 @@
     "vue-eslint-parser": "9.4.3",
     "vue-tsc": "2.2.0"
   },
-  "simple-git-hooks": {
+  "_simple-git-hooks": {
     "commit-msg": "pnpm sa git-commit-verify",
     "pre-commit": "pnpm typecheck && pnpm lint-staged"
   },
-  "lint-staged": {
+  "_lint-staged": {
     "*": "eslint --fix"
   },
   "website": "https://admin.soybeanjs.cn"
