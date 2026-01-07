@@ -94,6 +94,7 @@ default password: 123456
 
 
 ```notice
+cd dataCompareUI/package.json
 I temporarily disabled simple-git-hooks and lint-staged to prevent code errors in the front-end and back-end of a single project. Therefore, I added an "_" prefix and removed .git/hooks/commit-msg and .git/hooks/pre-commit. If you need this feature, simply remove the prefix and it will be automatically generated during the commit process as .git/hooks/commit-msg and .git/hooks/pre-commit.
 
 ```
