@@ -33,7 +33,7 @@ DataCompare使用哈希算法高效地比较表数据。主键和其余列的哈
 1. **Java** 17 或更高版本。
 2. **Maven** 3.8 或更高版本。
 3. **PostgreSQL** 15 或更高版本（用于仓库）。
-4. 支持的JDBC驱动程序（当前支持DB2、PostgreSQL、MySQL、MSSQL和Oracle）。
+4. 支持的JDBC驱动程序（当前支持DB2、PostgreSQL、MySQL、MSSQL、MariaDB和Oracle）。
 5. 直接PostgreSQL连接。
 6. Vue3、pnpm、TypeScript、NaiveUI、Vite5、UnoCSS
 7. **Node** 20 或更高版本
@@ -49,7 +49,7 @@ DataCompare使用哈希算法高效地比较表数据。主键和其余列的哈
 
 # 快速开始
 
-## 1. Fork并星标仓库
+## 1. Fork并Star仓库
 
 ## 2. 克隆和构建
 
