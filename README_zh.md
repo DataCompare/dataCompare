@@ -1,0 +1,227 @@
+<div>
+  <h1 style="font-size: 70px;text-align: center">数据对比</h1>
+  <h2 style="text-align: center">Data Compare</h2>
+  <h2 style="text-align: center">存储库基于PostgreSQL</h2>
+</div>
+<hr>
+
+[![License](https://img.shields.io/github/license/CrunchyData/postgres-operator)](LICENSE.md)
+
+# 简单易用的数据对比工具
+
+**数据对比（Data Compare）** 是一个基于Java的工具，用于验证数据库之间复制或迁移后的数据一致性。它适用于以下场景：
+
+- **从Oracle/DB2/MariaDB/MySQL/MSSQL到PostgreSQL的数据迁移：** 迁移后比较数据。
+- **相同或不同数据库平台之间的逻辑复制：** 在最小化数据库开销的同时跨平台验证数据。
+- **主-主复制配置：** 定期验证数据一致性以降低风险。
+
+DataCompare使用哈希算法高效地比较表数据。主键和其余列的哈希值存储在仓库中，减少存储和网络需求。比较过程是并行处理的，提高性能。
+
+# 特性
+
+- 支持Oracle、PostgreSQL、DB2、MariaDB、MySQL和MSSQL。
+- 使用哈希进行高效的并行比较。
+- 处理批处理以进行性能调优。
+- 在中央仓库中存储多个比较项目的配置。
+
+# 安装
+
+## 要求
+
+在开始构建和安装过程之前，请确保满足以下先决条件：
+
+1. **Java** 17 或更高版本。
+2. **Maven** 3.8 或更高版本。
+3. **PostgreSQL** 15 或更高版本（用于仓库）。
+4. 支持的JDBC驱动程序（当前支持DB2、PostgreSQL、MySQL、MSSQL和Oracle）。
+5. 直接PostgreSQL连接。
+6. Vue3、pnpm、TypeScript、NaiveUI、Vite5、UnoCSS
+7. **Node** 20 或更高版本
+8. **pnpm** 9 或更高版本
+
+## 限制
+
+- 日期/时间戳仅比较到秒（格式：DDMMYYYYHH24MISS）。
+- 不支持的数据类型：blob、long、longraw、bytea。
+- 布尔类型跨平台比较限制。
+- 预留字不能用作表/列名。
+- 如果RDBMS原生大小写中的列被引号括起来，则需要在`dc_table_column_map`表中为该列覆盖`preserve_case`。例如，如果Oracle中使用大写引号创建了列（"MYCOL"）。
+
+# 快速开始
+
+## 1. Fork并星标仓库
+
+## 2. 克隆和构建
+
+```shell
+git clone git@github.com:WJX20/dataCompare.git
+cd dataCompare
+mvn clean install -U
+
+修改 application.yml（redis:你的密码、postgresql:你的密码）
+
+```运行SQL
+运行 doc/datacompare.sql
+
+```启动
+运行 DataCompareApplication
+
+```启动前端dataCompareUI
+cd dataCompareUI
+
+```安装依赖
+
+pnpm install
+
+```启动
+pnpm dev
+
+```构建
+pnpm build
+
+```在浏览器中输入网站地址
+http://localhost:9725/
+
+```登录和密码
+
+默认登录名：admin
+默认密码：123456
+
+```注意
+cd dataCompareUI/package.json
+我暂时禁用了simple-git-hooks和lint-staged，以防止单个项目前后端的代码错误。因此，我添加了"_"前缀并删除了.git/hooks/commit-msg和.git/hooks/pre-commit。如果需要此功能，只需删除前缀，它将在提交过程中自动生成为.git/hooks/commit-msg和.git/hooks/pre-commit。
+
+```
+
+# 参考
+### 系统
+
+#### batch-fetch-size
+
+设置从源数据库或目标数据库检索行的获取大小。
+
+默认值：2000
+
+#### batch-commit-size
+
+提交大小控制插入到dc_source/dc_target临时表中的数组大小和行数。
+
+默认值：2000
+
+#### batch-progress-report-size
+
+定义用于报告进度的行数。
+
+默认值：1000000
+
+#### column-hash-method
+
+确定如何执行哈希。有效值为`database`和`hybrid`。当设置为`database`时，列值哈希在源/目标数据库上执行。对于`hybrid`，哈希由pgCompare线程执行。
+
+默认值：database
+
+#### database-sort
+
+确定基于主键对行的排序是否发生在源/目标数据库上。如果设置为true（默认值），则在比较之前对行进行排序。如果设置为false，则排序将在仓库数据库中进行。
+
+默认值：true
+
+#### float-scale
+
+设置用于转换低精度数字的首选精度。
+
+默认值：3
+
+#### loader-threads
+
+设置加载数据到临时表的线程数。设为0可禁用加载器线程。
+
+默认值：0
+
+#### log-level
+
+确定写入日志目的地的日志消息数量的级别。
+
+默认值：INFO
+
+#### log-destination
+
+日志消息将写入的位置。
+
+默认值：stdout
+
+#### message-queue-size
+
+加载器线程使用的消息队列大小（消息数）。
+
+默认值：100
+
+#### number-cast
+
+定义数字如何转换为哈希函数（notation|standard）。有效值是`notation`表示科学记数法，`standard`表示标准数字转换。
+
+默认值：notation
+
+#### observer-throttle
+
+设置为true或false，指示加载器线程在继续加载更多数据到临时表之前暂停并等待观察者线程跟上。
+
+默认值：true
+
+#### observer-throttle-size
+
+加载器线程在休眠并等待观察者线程清除之前加载的行数。
+
+默认值：2000000
+
+#### observer-vacuum
+
+设置为true或false，指示观察者是否在检查点期间对临时表执行vacuum操作。
+
+默认值：true
+
+#### stage-table-parallel
+
+临时表的默认并行度。
+
+默认值：0
+
+#### standard-number-format
+
+用于转换数字的格式
+
+默认值：0000000000000000000000.0000000000000000000000
+
+#### batch-offset-size
+
+此配置表示将跳过前n个数据条目，并从第(n+1)个数据条目开始生成哈希值进行比较。
+
+默认值：0
+
+#### batch-compare-size
+
+此配置表示将生成多少个哈希值。
+
+默认值：2000
+
+"batch-offset-size" & "batch-compare-size"：这两个配置用于在生成"哈希比较"时对数据进行分页查询。例如，仅比较1001到2000或5001到10000范围内的数据。
+
+#### batch-check-size
+
+此配置表示将执行多少次"检查验证"。
+
+默认值：1000
+
+# 图片展示
+<img width="1860" height="923" alt="login" src="https://github.com/user-attachments/assets/3ce94f66-1de6-41c0-8d5c-f7b1bc168775" />
+<img width="1860" height="923" alt="home" src="https://github.com/user-attachments/assets/6787526d-022c-4d79-93d9-d558c31b545c" />
+<img width="1860" height="923" alt="datasource" src="https://github.com/user-attachments/assets/6d03913c-9579-4097-86ef-e0679de51577" />
+<img width="1860" height="923" alt="user" src="https://github.com/user-attachments/assets/96f1c046-52ad-4e0a-a424-53e2b90226b1" />
+<img width="1860" height="923" alt="verify" src="https://github.com/user-attachments/assets/9054f2ac-5ee3-4764-95d1-bcce67e504ca" />
+<img width="1860" height="923" alt="verifyConfig" src="https://github.com/user-attachments/assets/ff1b4a39-289f-46d5-af49-75dd35408ffa" />
+<img width="1562" height="843" alt="verifyDetails" src="https://github.com/user-attachments/assets/de3694a2-4ef6-4ae7-98ae-e1da1d9b9c6b" />
+<img width="1446" height="836" alt="verifyDiffDetails" src="https://github.com/user-attachments/assets/5e5b6889-d1f7-4559-a730-1479fa093f38" />
+
+# 许可证
+
+**dataCompare** 根据 [Apache 2.0许可证](LICENSE.md) 授权。
