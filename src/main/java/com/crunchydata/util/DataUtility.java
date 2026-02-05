@@ -106,6 +106,10 @@ public class DataUtility {
         return false;
     }
 
+    public static boolean containsSpecialCharacter(String str) {
+        return str.matches(".*[^a-zA-Z0-9].*");
+    }
+
     public static boolean preserveCase(String expectedCase, String str) {
         return (((expectedCase.equals("lower") ) ? ! allLower(str) : ! allUpper(str)) || Arrays.asList(reservedWords).contains(str) || str.contains(" "));
     }
