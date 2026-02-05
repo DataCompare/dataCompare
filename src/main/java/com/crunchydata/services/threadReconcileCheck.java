@@ -29,6 +29,7 @@ import javax.sql.rowset.serial.SerialClob;
 import com.crunchydata.dao.ReconciliationResultDAO;
 import com.crunchydata.models.*;
 import com.crunchydata.util.DataUtility;
+import com.crunchydata.util.JsonUtility;
 import com.crunchydata.util.Logging;
 
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +37,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import static com.crunchydata.util.ColumnUtility.createColumnFilterClause;
+import static com.crunchydata.util.ColumnUtility.findColumnAlias;
+import static com.crunchydata.util.DataUtility.getQuoteString;
 import static com.crunchydata.util.SQLConstantsRepo.*;
 
 /**
@@ -91,6 +94,12 @@ public class threadReconcileCheck {
                 dcRow.setPkHash(rs.getString("pk_hash"));
                 dcRow.setPk(rs.getString("pk"));
                 dcRow.setCompareResult("compare_result");
+
+                // Get Column Info and Mapping
+                binds.clear();
+                binds.add(0, dct.getTid());
+                JSONObject columnMapping = new JSONObject(dbCommon.simpleSelectReturnString(repoConn, SQL_REPO_DCTABLECOLUMNMAP_FULLBYTID, binds));
+
                 int pkColumnCount = 0;
                 binds.clear();
                 dctmSource.setTableFilter(" ");
@@ -100,6 +109,7 @@ public class threadReconcileCheck {
                 Iterator<String> keys = pk.keys();
                 while (keys.hasNext()) {
                     String key = keys.next();
+                    String columnAlias = findColumnAlias(columnMapping.getJSONArray("columns"),  key.replace("`","").replace("\"",""),  "source");
                     if (pk.get(key) instanceof String) {
                         String value = pk.getString(key);
                         binds.add(pkColumnCount,value);
@@ -107,12 +117,13 @@ public class threadReconcileCheck {
                         Integer value = pk.getInt(key);
                         binds.add(pkColumnCount,value);
                     }
-                    dctmSource.setTableFilter(dctmSource.getTableFilter() + createColumnFilterClause(repoConn, dct.getTid(), key.toLowerCase(), "source"));
-                    dctmTarget.setTableFilter(dctmTarget.getTableFilter() + createColumnFilterClause(repoConn, dct.getTid(), key.toLowerCase(), "target"));
+                    dctmSource.setTableFilter(dctmSource.getTableFilter() + createColumnFilterClause(repoConn, dct.getTid(), columnAlias, "source", getQuoteString(Props.getProperty("source-type"))));
+                    dctmTarget.setTableFilter(dctmTarget.getTableFilter() + createColumnFilterClause(repoConn, dct.getTid(), columnAlias, "target", getQuoteString(Props.getProperty("target-type"))));
                     pkColumnCount++;
                 }
                 // 暂时先调整更低的日志等级
-                Logging.write("config", THREAD_NAME, String.format("Primary Key:  %s (WHERE = '%s')", pk, dctmSource.getTableFilter().substring(6)));
+                Logging.write("config", THREAD_NAME, String.format("Primary Key:  %s (WHERE = '%s')", pk, dctmSource.getTableFilter()));
+//                Logging.write("info", THREAD_NAME, String.format("Primary Key:  %s (WHERE = '%s')", pk, dctmSource.getTableFilter()));
 
                 JSONObject recheckResult = reCheck(repoConn, sourceConn, targetConn, dctmSource, dctmTarget, ciTarget.pkList, binds, dcRow, cid);
 
@@ -136,6 +147,7 @@ public class threadReconcileCheck {
         } catch (Exception e) {
             result.put("status","failed");
             StackTraceElement[] stackTrace = e.getStackTrace();
+            e.printStackTrace();
             Logging.write("severe", THREAD_NAME, String.format("执行对表“%s”第“%s”行的检查时出现错误：%s", dct.getTableAlias(), stackTrace[0].getLineNumber(), e.getMessage()));
             Logging.write("config", THREAD_NAME, String.format("Error performing check of table %s at line %s:  %s", dct.getTableAlias(), stackTrace[0].getLineNumber(), e.getMessage()));
         }

@@ -52,7 +52,7 @@ CREATE TABLE pgctest.test_nbr
 ,   col_dec_20      decimal(20)
 ,   col_dec_38      decimal(38)
 ,   col_dec_10_2    decimal(10,2)
-,   col_float32     real
+,   col_float32     float
 ,   col_float64     double precision
 ,   col_dec_38_9    DECIMAL(38,9)
 ,   col_dec_38_30   DECIMAL(38,30)
@@ -64,6 +64,21 @@ INSERT INTO pgctest.test_nbr VALUES
 (3, 3, 3, 3, 12345678901234567890, 1234567890123456789012345, 123.3 , 123456.3, 12345678.3, 32345678901234567890123456789.123456789,32345678.123456789012345678901234567890),
 (4, 4, 4, 4, null                , 1234567890123456789012345, 123.3 , 123456.3, 12345678.3, null                                   ,32345678.123456789012345678901234567890),
 (5, -5, -5, -5, -12345678901234567890, -1234567890123456789012345, -123.3 , -123456.3, -12345678.3, -32345678901234567890123456789.123456789, -32345678.123456789012345678901234567890);
+
+DROP TABLE IF EXISTS pgctest.test_nbr_db2;
+CREATE TABLE pgctest.test_nbr_db2
+(   id              int NOT NULL PRIMARY KEY
+    ,   col_small       smallint
+    ,   col_int         int
+    ,   col_bigint      bigint
+    ,   col_dec_20      decimal(20)
+    ,   col_dec_38      decimal(38)
+    ,   col_dec_10_2    decimal(10,2)
+    ,   col_float32     real
+    ,   col_float64     double precision
+    ,   col_dec_38_9    DECIMAL(38,9)
+    ,   col_dec_38_30   DECIMAL(38,30)
+);
 
 DROP TABLE IF EXISTS pgctest.test_char;
 CREATE TABLE pgctest.test_char
