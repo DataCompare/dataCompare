@@ -1,11 +1,11 @@
 {
-  "name": "soybean-admin",
+  "name": "data Compare Admin",
   "type": "module",
   "version": "1.0.0",
   "description": "data Compare is a Java-based tool for validating data consistency after replication or migration between databases.",
   "author": {
     "name": "wjx",
-    "email": "soybeanjs@outlook.com",
+    "email": "1837862986@qq.com",
     "url": "https://github.com/WJX20/dataCompare"
   },
   "license": "Apache-2.0 license",
