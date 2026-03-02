@@ -64,7 +64,7 @@ import java.util.Properties;
 public class Settings {
 
     public static Properties Props;
-    public static final String VERSION = "0.3.6.1";
+    public static final String VERSION = "0.3.6.5";
     private static final String paramFile = (System.getenv("PGCOMPARE_CONFIG") == null) ? "pgcompare.properties" : System.getenv("PGCOMPARE_CONFIG");
 
     static {
@@ -106,6 +106,7 @@ public class Settings {
         defaultProps.setProperty("log-level","INFO");
         defaultProps.setProperty("message-queue-size","1000");
         defaultProps.setProperty("number-cast","notation");
+        defaultProps.setProperty("float-cast","char");
         defaultProps.setProperty("observer-throttle","true");
         defaultProps.setProperty("observer-throttle-size","2000000");
         defaultProps.setProperty("observer-vacuum","true");

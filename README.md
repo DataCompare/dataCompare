@@ -48,8 +48,7 @@ Before initiating the build and installation process, ensure the following prere
 - Date/Timestamps compared only to the second (format: DDMMYYYYHH24MISS).
 - Unsupported data types: blob, long, longraw, bytea.
 - Cross-platform comparison limitations with boolean type.
-- Reserved words cannot be used for table/column names.
-- If a column is quoted in the RDBMS's native case, you will need to override the `preserve_case` in the `dc_table_column_map` table for that column.  For example, if a column was created in Oracle with quotes in upper case ("MYCOL").
+- Low precission types (float, real) cannot be compared to high precission types (double).
 
 # Getting Started
 
@@ -134,6 +133,12 @@ I temporarily disabled simple-git-hooks and lint-staged to prevent code errors i
   Determines if the sorting of the rows based on primary key occurs on the source/target database.  If set to true, the default, the rows will be sorted before being compared.  If set to false, the sorting will take place in the repository database.
 
   Default: true
+
+#### float-cast
+
+  Defines how float and double data types are cast for hash function (notation|standard).
+
+  Default is notation (for scientific notation).
 
 #### float-scale
 

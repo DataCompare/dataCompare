@@ -308,12 +308,6 @@ public class threadReconcile extends Thread {
                 Thread.sleep(1000);
             }
 
-            if ( destType.equals("source")) {
-                ts.sourceComplete = true;
-            } else {
-                ts.targetComplete = true;
-            }
-
         } catch( SQLException e) {
             StackTraceElement[] stackTrace = e.getStackTrace();
             Logging.write("severe", threadName, String.format("（%s）数据库错误发生在第 %s 行：%s", destType, stackTrace[0].getLineNumber(), e.getMessage()));
@@ -329,6 +323,12 @@ public class threadReconcile extends Thread {
                 ts.setException(e);
             }
         } finally {
+            if ( destType.equals("source")) {
+                ts.sourceComplete = true;
+            } else {
+                ts.targetComplete = true;
+            }
+
             try {
                 if (rs != null) {
                     rs.close();
